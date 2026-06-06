@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Expansion Atlas · Shanil Dutta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-base: #0a0e16;
+    --bg-elevated: #10151f;
+    --bg-card: #141a26;
+    --bg-card-hover: #181f2d;
+    --bg-card-emphasis: #1a2231;
+    --border-faint: #1b2230;
+    --border-subtle: #232c3e;
+    --border-emphasis: #2f3a4f;
+    --text-primary: #ede4cd;
+    --text-bright: #f5edd8;
+    --text-secondary: #a89c82;
+    --text-muted: #6e6553;
+    --text-faint: #46402f;
+    --champagne: #c4a86e;
+    --champagne-bright: #d8bd83;
+    --champagne-deep: #8a7547;
+    --tier-prime: #7bae8f;
+    --tier-viable: #b6c36b;
+    --tier-contested: #cda94e;
+    --tier-constrained: #cf8a56;
+    --tier-closed: #b85a4a;
+    --verdict-survives: #7bae8f;
+    --verdict-fragile: #cda94e;
+    --verdict-fails: #b85a4a;
+    --font-display: 'Instrument Serif', 'Cormorant Garamond', Georgia, serif;
+    --font-body: 'Geist', system-ui, sans-serif;
+    --font-mono: 'IBM Plex Mono', 'SF Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg-base);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-weight: 300;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.95 0 0 0 0 0.85 0 0 0 0.025 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.55;
+    mix-blend-mode: overlay;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 90% 60% at 50% -20%, rgba(196, 168, 110, 0.05), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 95% 30%, rgba(196, 168, 110, 0.025), transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .container {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 56px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ===== IDENTITY BAR ===== */
+  .identity-bar {
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 24px 0;
+    background: rgba(10, 14, 22, 0.9);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    position: sticky;
+    top: 0;
+    z-index: 200;
+  }
+
+  .identity-grid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .brand { display: flex; flex-direction: column; gap: 2px; }
+
+  .brand-name {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 26px;
+    letter-spacing: 0.005em;
+    color: var(--text-bright);
+    line-height: 1;
+  }
+
+  .brand-tag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.34em;
+    color: var(--champagne);
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  .identity-right { display: flex; align-items: center; gap: 14px; }
+
+  .instrument-label {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--text-secondary);
+    letter-spacing: 0.01em;
+  }
+
+  .live-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--champagne);
+    box-shadow: 0 0 10px var(--champagne);
+    animation: pulse 2.6s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.5;transform:scale(.9);} }
+
+  /* ===== HERO ===== */
+  .hero { padding: 120px 0 80px; position: relative; }
+
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--champagne);
+    text-transform: uppercase;
+    margin-bottom: 36px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .hero-eyebrow::before { content:''; width: 32px; height: 1px; background: var(--champagne); }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 88px;
+    line-height: 0.98;
+    letter-spacing: -0.022em;
+    color: var(--text-bright);
+    max-width: 1080px;
+    margin-bottom: 40px;
+  }
+  .hero-title em { font-style: italic; color: var(--champagne-bright); }
+
+  .hero-sub {
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    max-width: 660px;
+    font-weight: 300;
+  }
+
+  /* ===== INTAKE ===== */
+  .intake-section { padding: 40px 0 60px; }
+
+  .intake-frame {
+    background: linear-gradient(180deg, var(--bg-elevated), var(--bg-card) 70%);
+    border: 1px solid var(--border-subtle);
+    padding: 48px;
+    position: relative;
+  }
+  .intake-frame::before {
+    content:''; position:absolute; top:-1px; left:0; right:0; height:1px;
+    background: linear-gradient(90deg, transparent 10%, var(--champagne) 50%, transparent 90%);
+    opacity: .7;
+  }
+
+  .intake-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 36px; gap: 32px; flex-wrap: wrap;
+  }
+
+  .intake-title {
+    font-family: var(--font-display);
+    font-size: 30px; font-weight: 400; color: var(--text-bright);
+    letter-spacing: -0.01em;
+  }
+  .intake-title .step { font-style: italic; color: var(--champagne); font-size: 14px; margin-right: 12px; }
+
+  .intake-note { font-size: 13px; color: var(--text-muted); max-width: 360px; line-height: 1.6; }
+
+  .intake-controls {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .control-block label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 9px; letter-spacing: 0.3em;
+    color: var(--text-muted); text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .control-block select {
+    width: 100%;
+    padding: 16px 18px;
+    background: var(--bg-base);
+    border: 1px solid var(--border-emphasis);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 14px; font-weight: 400;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    -webkit-appearance: none; -moz-appearance: none; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%23c4a86e' stroke-width='1.5' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 18px center;
+  }
+  .control-block select:hover, .control-block select:focus {
+    border-color: var(--champagne); outline: none; background-color: var(--bg-card-emphasis);
+  }
+
+  .intake-run {
+    display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+  }
+
+  .run-btn {
+    background: var(--champagne);
+    color: #14110a;
+    border: none;
+    padding: 18px 40px;
+    font-family: var(--font-mono);
+    font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .run-btn:hover { background: var(--champagne-bright); transform: translateY(-1px); }
+
+  .run-hint {
+    font-family: var(--font-display); font-style: italic;
+    font-size: 16px; color: var(--text-muted);
+  }
+
+  /* ===== ATLAS / MAP ===== */
+  .atlas-section { padding: 60px 0 80px; }
+
+  .section-head {
+    display: grid; grid-template-columns: 1fr auto; align-items: flex-end;
+    margin-bottom: 48px; gap: 64px;
+  }
+  .section-eyebrow {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.36em;
+    color: var(--champagne); text-transform: uppercase; margin-bottom: 18px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-no { font-family: var(--font-display); font-size: 12px; font-style: italic; color: var(--text-muted); }
+  .section-title {
+    font-family: var(--font-display); font-weight: 400; font-size: 52px; line-height: 1;
+    color: var(--text-bright); letter-spacing: -0.018em; max-width: 760px;
+  }
+  .section-title em { font-style: italic; color: var(--champagne-bright); }
+  .section-desc { font-size: 14px; color: var(--text-secondary); max-width: 340px; text-align: right; line-height: 1.65; }
+
+  .map-frame {
+    border: 1px solid var(--border-subtle);
+    background:
+      radial-gradient(ellipse 70% 90% at 50% 40%, #0d1320 0%, #090d15 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .map-frame::before {
+    content:''; position:absolute; top:-1px; left:0; right:0; height:2px;
+    background: linear-gradient(90deg, transparent 0%, var(--champagne) 25%, var(--champagne-bright) 50%, var(--champagne) 75%, transparent 100%);
+    z-index: 5;
+  }
+
+  #atlasMap { width: 100%; height: 600px; display: block; cursor: grab; }
+  #atlasMap:active { cursor: grabbing; }
+
+  .map-overlay-prompt {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 16px;
+    background: rgba(10, 14, 22, 0.55);
+    backdrop-filter: blur(2px);
+    z-index: 10; transition: opacity 0.6s ease; text-align: center; padding: 20px;
+  }
+  .map-overlay-prompt.hidden { opacity: 0; pointer-events: none; }
+  .map-overlay-prompt .op-eyebrow {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.36em;
+    color: var(--champagne); text-transform: uppercase;
+  }
+  .map-overlay-prompt .op-text {
+    font-family: var(--font-display); font-size: 28px; font-style: italic;
+    color: var(--text-primary); max-width: 460px; line-height: 1.3;
+  }
+
+  .map-legend {
+    position: absolute; bottom: 24px; left: 24px; z-index: 8;
+    background: rgba(10, 14, 22, 0.82);
+    border: 1px solid var(--border-subtle);
+    padding: 18px 22px;
+    backdrop-filter: blur(8px);
+    display: none;
+  }
+  .map-legend.shown { display: block; }
+  .map-legend-title {
+    font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.3em;
+    color: var(--text-muted); text-transform: uppercase; margin-bottom: 14px;
+  }
+  .legend-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+  .legend-row:last-child { margin-bottom: 0; }
+  .legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .legend-label { font-size: 12px; color: var(--text-secondary); }
+  .legend-label span { font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); margin-left: 6px; letter-spacing: 0.1em; }
+
+  .map-hint {
+    position: absolute; top: 22px; right: 24px; z-index: 8;
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em;
+    color: var(--text-muted); text-transform: uppercase;
+    background: rgba(10,14,22,0.7); padding: 8px 14px; border: 1px solid var(--border-faint);
+    display: none;
+  }
+  .map-hint.shown { display: block; }
+
+  /* Tooltip */
+  .atlas-tooltip {
+    position: absolute; z-index: 50; pointer-events: none;
+    background: rgba(13, 18, 28, 0.96);
+    border: 1px solid var(--border-emphasis);
+    padding: 16px 20px; min-width: 230px; max-width: 280px;
+    opacity: 0; transition: opacity 0.18s ease;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  }
+  .atlas-tooltip.shown { opacity: 1; }
+  .tt-name {
+    font-family: var(--font-display); font-size: 20px; color: var(--text-bright);
+    letter-spacing: -0.01em; margin-bottom: 4px;
+  }
+  .tt-region {
+    font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.24em;
+    color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px;
+  }
+  .tt-score-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; }
+  .tt-score { font-family: var(--font-display); font-size: 30px; line-height: 1; }
+  .tt-tier { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; }
+  .tt-note { font-size: 12px; color: var(--text-secondary); line-height: 1.5; font-weight: 300; }
+  .tt-cta { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.24em; color: var(--champagne); text-transform: uppercase; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border-faint); }
+
+  /* ===== RANKING GRID ===== */
+  .ranking-section { padding: 40px 0 80px; display: none; }
+  .ranking-section.shown { display: block; }
+
+  .ranking-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: var(--border-subtle); border: 1px solid var(--border-subtle);
+  }
+  .rank-card {
+    background: var(--bg-card); padding: 26px 24px; cursor: pointer;
+    transition: background 0.25s ease; position: relative;
+  }
+  .rank-card:hover { background: var(--bg-card-hover); }
+  .rank-card::before {
+    content: ''; position: absolute; left: 0; top: 0; width: 3px; height: 100%;
+    background: var(--tier); opacity: 0.85;
+  }
+  .rank-card-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+  .rank-name { font-family: var(--font-display); font-size: 21px; color: var(--text-bright); letter-spacing: -0.012em; line-height: 1.1; }
+  .rank-score { font-family: var(--font-display); font-size: 30px; line-height: 1; color: var(--tier); font-style: italic; }
+  .rank-tier { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--tier); margin-bottom: 12px; }
+  .rank-note { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .rank-open { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--text-faint); margin-top: 14px; transition: color 0.25s; }
+  .rank-card:hover .rank-open { color: var(--champagne); }
+
+  /* ===== SIMULATION MODAL ===== */
+  .sim-overlay {
+    position: fixed; inset: 0; z-index: 500;
+    background: rgba(6, 9, 14, 0.85);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    display: none; align-items: flex-start; justify-content: center;
+    padding: 48px 24px; overflow-y: auto;
+  }
+  .sim-overlay.shown { display: flex; }
+
+  .sim-modal {
+    background: linear-gradient(180deg, var(--bg-elevated), var(--bg-base));
+    border: 1px solid var(--border-emphasis);
+    max-width: 880px; width: 100%;
+    position: relative;
+    box-shadow: 0 40px 120px rgba(0,0,0,0.7);
+  }
+  .sim-modal::before {
+    content:''; position:absolute; top:-1px; left:0; right:0; height:2px;
+    background: linear-gradient(90deg, transparent, var(--champagne-bright), transparent);
+  }
+
+  .sim-close {
+    position: absolute; top: 24px; right: 28px;
+    background: none; border: none; color: var(--text-muted);
+    font-family: var(--font-mono); font-size: 22px; cursor: pointer;
+    line-height: 1; transition: color 0.2s; z-index: 5;
+  }
+  .sim-close:hover { color: var(--text-bright); }
+
+  .sim-header { padding: 44px 48px 32px; border-bottom: 1px solid var(--border-subtle); }
+  .sim-eyebrow {
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.36em;
+    color: var(--champagne); text-transform: uppercase; margin-bottom: 18px;
+  }
+  .sim-market-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; }
+  .sim-market-name { font-family: var(--font-display); font-size: 48px; color: var(--text-bright); letter-spacing: -0.02em; line-height: 1; }
+  .sim-market-sub { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.24em; color: var(--text-muted); text-transform: uppercase; margin-top: 10px; }
+  .sim-score-badge { text-align: right; }
+  .sim-score-num { font-family: var(--font-display); font-size: 56px; font-style: italic; line-height: 0.9; }
+  .sim-score-tier { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.24em; text-transform: uppercase; margin-top: 4px; }
+
+  .sim-body { padding: 36px 48px 12px; }
+
+  .sim-progress {
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.3em;
+    color: var(--text-muted); text-transform: uppercase; margin-bottom: 28px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .sim-skip { background: none; border: 1px solid var(--border-emphasis); color: var(--text-secondary); font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.2em; text-transform: uppercase; padding: 6px 14px; cursor: pointer; transition: all 0.2s; }
+  .sim-skip:hover { border-color: var(--champagne); color: var(--champagne); }
+
+  .vector {
+    border-top: 1px solid var(--border-faint);
+    padding: 20px 0;
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 24px; align-items: start;
+    opacity: 0.25; transition: opacity 0.5s ease;
+  }
+  .vector.resolved { opacity: 1; }
+  .vector-main { }
+  .vector-name { font-family: var(--font-display); font-size: 20px; color: var(--text-bright); letter-spacing: -0.01em; margin-bottom: 8px; }
+  .vector-reason { font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; font-weight: 300; max-width: 560px; min-height: 1px; }
+  .vector-reason.scanning { color: var(--text-faint); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; }
+  .vector-verdict {
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.24em;
+    text-transform: uppercase; padding: 6px 12px; border: 1px solid;
+    white-space: nowrap; opacity: 0; transition: opacity 0.4s ease;
+  }
+  .vector.resolved .vector-verdict { opacity: 1; }
+  .vector-verdict.survives { color: var(--verdict-survives); border-color: var(--verdict-survives); }
+  .vector-verdict.fragile { color: var(--verdict-fragile); border-color: var(--verdict-fragile); }
+  .vector-verdict.fails { color: var(--verdict-fails); border-color: var(--verdict-fails); }
+
+  .sim-synthesis {
+    margin: 12px 48px 0;
+    padding: 36px 0 12px;
+    border-top: 1px solid var(--border-subtle);
+    opacity: 0; max-height: 0; overflow: hidden;
+    transition: opacity 0.6s ease, max-height 0.6s ease;
+  }
+  .sim-synthesis.shown { opacity: 1; max-height: 800px; }
+  .synthesis-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.36em; color: var(--champagne); text-transform: uppercase; margin-bottom: 16px; }
+  .synthesis-verdict { font-family: var(--font-display); font-size: 34px; color: var(--text-bright); letter-spacing: -0.014em; margin-bottom: 12px; }
+  .synthesis-verdict em { font-style: italic; }
+  .synthesis-text { font-size: 14.5px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 28px; max-width: 640px; }
+  .synthesis-rec-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.3em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 14px; }
+  .synthesis-rec { padding-left: 18px; border-left: 1px solid var(--champagne-deep); margin-bottom: 14px; }
+  .synthesis-rec p { font-size: 14px; color: var(--text-primary); line-height: 1.55; font-weight: 300; }
+
+  .sim-cta {
+    margin: 32px 48px 0; padding: 32px 0 44px;
+    border-top: 1px solid var(--border-subtle);
+    opacity: 0; transition: opacity 0.6s ease;
+  }
+  .sim-cta.shown { opacity: 1; }
+  .sim-cta-text { font-family: var(--font-display); font-style: italic; font-size: 18px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 22px; max-width: 600px; }
+  .sim-cta-text strong { color: var(--champagne-bright); font-weight: 400; }
+  .sim-cta-btn {
+    display: inline-flex; align-items: center; gap: 14px;
+    padding: 16px 30px; border: 1px solid var(--champagne-deep);
+    color: var(--champagne-bright); text-decoration: none;
+    font-family: var(--font-display); font-style: italic; font-size: 17px;
+    transition: all 0.3s ease;
+  }
+  .sim-cta-btn:hover { background: rgba(196,168,110,0.06); border-color: var(--champagne); color: var(--text-bright); }
+  .sim-cta-btn svg { width: 15px; height: 15px; fill: currentColor; }
+
+  /* ===== FRAMEWORK ===== */
+  .framework-section { padding: 100px 0; border-top: 1px solid var(--border-faint); }
+
+  .framework-grid { display: flex; flex-direction: column; border-top: 1px solid var(--border-subtle); }
+  .fw-item {
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 32px 0; cursor: pointer; transition: padding 0.25s ease;
+  }
+  .fw-item:hover { padding-left: 12px; }
+  .fw-item-head { display: grid; grid-template-columns: 60px 1fr auto; gap: 28px; align-items: center; }
+  .fw-num { font-family: var(--font-display); font-size: 28px; font-style: italic; color: var(--champagne-deep); }
+  .fw-name { font-family: var(--font-display); font-size: 28px; color: var(--text-bright); letter-spacing: -0.014em; }
+  .fw-toggle { font-family: var(--font-mono); font-size: 18px; color: var(--champagne); transition: transform 0.3s ease; }
+  .fw-item.open .fw-toggle { transform: rotate(45deg); }
+  .fw-detail { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
+  .fw-item.open .fw-detail { max-height: 400px; }
+  .fw-detail-inner { padding: 22px 0 6px 88px; }
+  .fw-detail-inner p { font-size: 14.5px; color: var(--text-secondary); line-height: 1.7; font-weight: 300; max-width: 720px; }
+  .fw-maps { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.24em; color: var(--text-muted); text-transform: uppercase; margin-top: 16px; }
+
+  /* ===== CONVERSION ===== */
+  .conversion { padding: 130px 0 100px; border-top: 1px solid var(--border-subtle); position: relative; }
+  .conversion::before {
+    content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
+    width: 240px; height: 1px; background: linear-gradient(90deg, transparent, var(--champagne), transparent);
+  }
+  .conversion-inner { max-width: 880px; margin: 0 auto; text-align: center; }
+  .conversion-eyebrow { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.44em; color: var(--champagne); text-transform: uppercase; margin-bottom: 40px; }
+  .conversion-line { font-family: var(--font-display); font-size: 36px; font-weight: 400; line-height: 1.35; color: var(--text-bright); margin-bottom: 24px; letter-spacing: -0.014em; }
+  .conversion-line em { font-style: italic; color: var(--champagne-bright); }
+  .conversion-divider { width: 60px; height: 1px; background: var(--champagne-deep); margin: 48px auto; }
+  .conversion-scarcity { font-family: var(--font-display); font-size: 20px; font-style: italic; color: var(--text-secondary); margin: 48px 0; line-height: 1.5; }
+  .contact-link {
+    display: inline-flex; align-items: center; gap: 16px;
+    padding: 18px 32px; border: 1px solid var(--champagne-deep);
+    color: var(--champagne-bright); text-decoration: none;
+    font-family: var(--font-display); font-size: 18px; font-style: italic;
+    transition: all 0.3s ease; margin-top: 16px;
+  }
+  .contact-link:hover { background: rgba(196,168,110,0.06); border-color: var(--champagne); color: var(--text-bright); }
+  .contact-link svg { width: 16px; height: 16px; fill: currentColor; }
+  .contact-meta { margin-top: 28px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.32em; color: var(--text-muted); text-transform: uppercase; }
+  .colophon { margin-top: 90px; padding-top: 36px; border-top: 1px solid var(--border-faint); text-align: center; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.32em; color: var(--text-faint); text-transform: uppercase; }
+
+  /* Map SVG element styles */
+  .country { fill: #131a27; stroke: #1f2838; stroke-width: 0.4px; transition: fill 0.4s ease; }
+  .country.home { fill: #2a2517; stroke: var(--champagne-deep); stroke-width: 0.8px; }
+  .graticule { fill: none; stroke: #161d2b; stroke-width: 0.4px; }
+  .sphere-outline { fill: none; stroke: #1f2838; stroke-width: 0.6px; }
+  .corridor { fill: none; stroke-linecap: round; }
+  .node { cursor: pointer; transition: opacity 0.5s ease; }
+  .node-hit { fill: transparent; cursor: pointer; }
+  .home-node-ring { fill: none; stroke: var(--champagne); stroke-width: 1px; opacity: 0.5; }
+  .home-node-core { fill: var(--champagne-bright); }
+  .home-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; fill: var(--champagne); text-transform: uppercase; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .container { padding: 0 32px; }
+    .hero { padding: 80px 0 56px; }
+    .hero-title { font-size: 52px; }
+    .intake-controls { grid-template-columns: 1fr 1fr; }
+    .ranking-grid { grid-template-columns: 1fr 1fr; }
+    .section-head { grid-template-columns: 1fr; gap: 24px; }
+    .section-desc { text-align: left; max-width: 100%; }
+    .section-title { font-size: 38px; }
+    #atlasMap { height: 440px; }
+    .sim-market-name { font-size: 34px; }
+    .sim-header, .sim-body { padding-left: 28px; padding-right: 28px; }
+    .sim-synthesis, .sim-cta { margin-left: 28px; margin-right: 28px; }
+    .fw-detail-inner { padding-left: 0; }
+    .fw-item-head { grid-template-columns: 40px 1fr auto; gap: 16px; }
+    .fw-name { font-size: 22px; }
+    .conversion-line { font-size: 26px; }
+  }
+  @media (max-width: 640px) {
+    .container { padding: 0 20px; }
+    .hero-title { font-size: 38px; }
+    .intake-frame { padding: 28px 20px; }
+    .intake-controls { grid-template-columns: 1fr; }
+    .ranking-grid { grid-template-columns: 1fr; }
+    #atlasMap { height: 360px; }
+    .map-legend { position: static; margin: 16px; }
+    .sim-market-name { font-size: 28px; }
+    .sim-score-num { font-size: 42px; }
+    .vector { grid-template-columns: 1fr; gap: 10px; }
+    .vector-verdict { justify-self: start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- IDENTITY BAR -->
+<div class="identity-bar">
+  <div class="container">
+    <div class="identity-grid">
+      <div class="brand">
+        <div class="brand-name">Shanil Dutta</div>
+        <div class="brand-tag">Market &amp; Expansion Strategy</div>
+      </div>
+      <div class="identity-right">
+        <span class="instrument-label">The Expansion Atlas</span>
+        <span class="live-dot"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Flagship Instrument · Market Entry Intelligence</div>
+    <h1 class="hero-title">Expansion is not a destination. It is a <em>system</em> that can be read.</h1>
+    <p class="hero-sub">
+      Set your position. The Atlas reveals which markets are reachable from where you stand, which
+      corridors are open to you, and which are structurally closed. Then it runs your entry thesis
+      against the vectors that decide whether it survives.
+    </p>
+  </div>
+</section>
+
+<!-- INTAKE -->
+<section class="intake-section">
+  <div class="container">
+    <div class="intake-frame">
+      <div class="intake-head">
+        <div class="intake-title"><span class="step">i.</span>Set your position</div>
+        <div class="intake-note">Four inputs define your vantage. The Atlas scores every market against your specific position, not a generic ranking.</div>
+      </div>
+      <div class="intake-controls">
+        <div class="control-block">
+          <label>Home Market</label>
+          <select id="homeSelect"></select>
+        </div>
+        <div class="control-block">
+          <label>Sector</label>
+          <select id="sectorSelect"></select>
+        </div>
+        <div class="control-block">
+          <label>Capital Commitment</label>
+          <select id="capitalSelect">
+            <option value="0">Under $1M</option>
+            <option value="1" selected>$1M – $10M</option>
+            <option value="2">$10M – $50M</option>
+            <option value="3">$50M+</option>
+          </select>
+        </div>
+        <div class="control-block">
+          <label>Entry Mode</label>
+          <select id="modeSelect">
+            <option value="export">Export / Distribution</option>
+            <option value="jv">Joint Venture</option>
+            <option value="subsidiary">Wholly-Owned Subsidiary</option>
+            <option value="greenfield">Greenfield Operation</option>
+            <option value="mna">Acquisition / M&amp;A</option>
+          </select>
+        </div>
+      </div>
+      <div class="intake-run">
+        <button class="run-btn" id="runBtn">Activate the Atlas</button>
+        <span class="run-hint">Your position maps in real time.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ATLAS MAP -->
+<section class="atlas-section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow"><span class="section-no">II.</span> The Atlas</div>
+        <h2 class="section-title">The world, from <em>where you stand</em>.</h2>
+      </div>
+      <p class="section-desc">
+        Every node is a market, scored against your position. Brightness and color signal reachability.
+        Corridors trace the routes open to you. Click any market to run its entry simulation.
+      </p>
+    </div>
+
+    <div class="map-frame">
+      <div class="map-hint" id="mapHint">Click a market · scroll to zoom · drag to pan</div>
+      <svg id="atlasMap"></svg>
+      <div class="map-overlay-prompt" id="mapPrompt">
+        <div class="op-eyebrow">Atlas Dormant</div>
+        <div class="op-text">Set your position above and activate the Atlas to reveal your reachable markets.</div>
+      </div>
+      <div class="map-legend" id="mapLegend">
+        <div class="map-legend-title">Reachability</div>
+        <div class="legend-row"><span class="legend-dot" style="background:var(--tier-prime)"></span><span class="legend-label">Prime <span>74–100</span></span></div>
+        <div class="legend-row"><span class="legend-dot" style="background:var(--tier-viable)"></span><span class="legend-label">Viable <span>62–73</span></span></div>
+        <div class="legend-row"><span class="legend-dot" style="background:var(--tier-contested)"></span><span class="legend-label">Contested <span>50–61</span></span></div>
+        <div class="legend-row"><span class="legend-dot" style="background:var(--tier-constrained)"></span><span class="legend-label">Constrained <span>38–49</span></span></div>
+        <div class="legend-row"><span class="legend-dot" style="background:var(--tier-closed)"></span><span class="legend-label">Structurally Closed <span>&lt;38</span></span></div>
+      </div>
+    </div>
+    <div class="atlas-tooltip" id="atlasTooltip"></div>
+  </div>
+</section>
+
+<!-- RANKING -->
+<section class="ranking-section" id="rankingSection">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow"><span class="section-no">III.</span> Corridor Ranking</div>
+        <h2 class="section-title">Your markets, <em>ordered</em>.</h2>
+      </div>
+      <p class="section-desc">
+        The same scores, ranked. Your strongest corridors first. Click any market to run the
+        three-year entry simulation.
+      </p>
+    </div>
+    <div class="ranking-grid" id="rankingGrid"></div>
+  </div>
+</section>
+
+<!-- FRAMEWORK -->
+<section class="framework-section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-eyebrow"><span class="section-no">IV.</span> Methodology</div>
+        <h2 class="section-title">The Expansion Readiness <em>Architecture</em>.</h2>
+      </div>
+      <p class="section-desc">
+        Every score on this Atlas is built from five dimensions. The same architecture structures
+        the configured engagement. Expand each to see what it measures.
+      </p>
+    </div>
+
+    <div class="framework-grid">
+      <div class="fw-item" onclick="toggleFw(this)">
+        <div class="fw-item-head">
+          <div class="fw-num">01</div>
+          <div class="fw-name">Market Thesis Maturity</div>
+          <div class="fw-toggle">+</div>
+        </div>
+        <div class="fw-detail"><div class="fw-detail-inner">
+          <p>Whether a real, defensible read on the target market exists, or whether the move rests on a hunch. Measures depth of demand understanding, clarity on the addressable segment, and the strength of the underlying entry logic. Most failed expansions are not bad markets; they are thin theses.</p>
+          <div class="fw-maps">Maps to · Demand Durability vector</div>
+        </div></div>
+      </div>
+
+      <div class="fw-item" onclick="toggleFw(this)">
+        <div class="fw-item-head">
+          <div class="fw-num">02</div>
+          <div class="fw-name">Counterparty Architecture</div>
+          <div class="fw-toggle">+</div>
+        </div>
+        <div class="fw-detail"><div class="fw-detail-inner">
+          <p>The availability and quality of partners, distributors, and pathways into the market. Counterparty selection is the single largest controllable execution risk in most market entries. A strong corridor with no credible counterparty is a closed door that looks open.</p>
+          <div class="fw-maps">Maps to · Counterparty Architecture vector</div>
+        </div></div>
+      </div>
+
+      <div class="fw-item" onclick="toggleFw(this)">
+        <div class="fw-item-head">
+          <div class="fw-num">03</div>
+          <div class="fw-name">Regulatory &amp; Political Exposure</div>
+          <div class="fw-toggle">+</div>
+        </div>
+        <div class="fw-detail"><div class="fw-detail-inner">
+          <p>The stability of the policy and regulatory environment over the life of the commitment. Includes political continuity risk, regulatory clarity, and the probability of mid-cycle policy shifts. The relevant question is rarely the rule today; it is whether the rule holds for three years.</p>
+          <div class="fw-maps">Maps to · Political &amp; Regulatory vector</div>
+        </div></div>
+      </div>
+
+      <div class="fw-item" onclick="toggleFw(this)">
+        <div class="fw-item-head">
+          <div class="fw-num">04</div>
+          <div class="fw-name">Capital &amp; Operational Capacity</div>
+          <div class="fw-toggle">+</div>
+        </div>
+        <div class="fw-detail"><div class="fw-detail-inner">
+          <p>Whether the capital band can fund not just entry, but the operational ramp through the difficult middle period before the market turns profitable. Underfunded entries do not fail at the start; they fail in the middle, when the runway runs out before the market matures.</p>
+          <div class="fw-maps">Maps to · Capital &amp; Operational Endurance vector</div>
+        </div></div>
+      </div>
+
+      <div class="fw-item" onclick="toggleFw(this)">
+        <div class="fw-item-head">
+          <div class="fw-num">05</div>
+          <div class="fw-name">Risk Absorption</div>
+          <div class="fw-toggle">+</div>
+        </div>
+        <div class="fw-detail"><div class="fw-detail-inner">
+          <p>What happens to the parent enterprise if the entry fails. Measures concentration risk, competitive resistance, and macro and currency exposure. A market worth entering is one where a failed entry is survivable and a successful one is defensible against incumbents and currency shocks alike.</p>
+          <div class="fw-maps">Maps to · Competitive Resistance &amp; Macro vectors</div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SIMULATION MODAL -->
+<div class="sim-overlay" id="simOverlay">
+  <div class="sim-modal">
+    <button class="sim-close" id="simClose">&times;</button>
+    <div class="sim-header">
+      <div class="sim-eyebrow">Three-Year Entry Simulation</div>
+      <div class="sim-market-row">
+        <div>
+          <div class="sim-market-name" id="simName">Market</div>
+          <div class="sim-market-sub" id="simSub">Region · Assessed for entry</div>
+        </div>
+        <div class="sim-score-badge">
+          <div class="sim-score-num" id="simScore">—</div>
+          <div class="sim-score-tier" id="simTier">Tier</div>
+        </div>
+      </div>
+    </div>
+    <div class="sim-body">
+      <div class="sim-progress">
+        <span id="simProgressText">Running thesis against six structural vectors…</span>
+        <button class="sim-skip" id="simSkip">Skip to result</button>
+      </div>
+      <div id="vectorList"></div>
+    </div>
+    <div class="sim-synthesis" id="simSynthesis">
+      <div class="synthesis-label">Synthesis</div>
+      <div class="synthesis-verdict" id="synthVerdict">—</div>
+      <div class="synthesis-text" id="synthText"></div>
+      <div class="synthesis-rec-label">Sequence Before Committing Capital</div>
+      <div id="synthRecs"></div>
+    </div>
+    <div class="sim-cta" id="simCta">
+      <div class="sim-cta-text">
+        This is a structural first-read on <strong id="ctaMarket">this market</strong>. A configured
+        assessment maps your real entities, counterparties, regulatory exposure, and decision calendar
+        into a sequenced entry plan.
+      </div>
+      <a href="https://www.linkedin.com/in/shanildutta" target="_blank" rel="noopener" class="sim-cta-btn">
+        <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.38 4.28 5.47v6.27zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+        <span>Request a Confidential Briefing</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- CONVERSION -->
+<section class="conversion">
+  <div class="container">
+    <div class="conversion-inner">
+      <div class="conversion-eyebrow">The Configured Engagement</div>
+      <p class="conversion-line">
+        The Atlas shows you the <em>system</em>. The engagement maps your position into a
+        sequenced market-entry strategy.
+      </p>
+      <div class="conversion-divider"></div>
+      <p class="conversion-scarcity">
+        Capacity is held for a limited number of retained engagements.
+        Briefings are extended on a selective basis.
+      </p>
+      <a href="https://www.linkedin.com/in/shanildutta" target="_blank" rel="noopener" class="contact-link">
+        <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.38 4.28 5.47v6.27zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+        <span>Connect via LinkedIn</span>
+      </a>
+      <div class="contact-meta">Colombo · Indian Ocean Vantage</div>
+      <div class="colophon">Shanil Dutta · Market &amp; Expansion Strategy · The Expansion Atlas · All Assessments Confidential</div>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+<script>
+/* ============================================================
+   DATA
+   ============================================================ */
+const SECTORS = {
+  manufacturing: "Manufacturing & Industrial Goods",
+  apparel: "Apparel & Textiles",
+  agrifood: "Agriculture & Food",
+  it_saas: "IT, Software & SaaS",
+  pharma: "Pharmaceuticals & Healthcare",
+  industrial: "Heavy Industry & Engineering",
+  consumer: "Consumer & Retail Goods",
+  logistics: "Logistics & Trade Services",
+  fintech: "Financial Services & Fintech",
+  renewables: "Energy & Renewables"
+};
+
+const MODES = {
+  export: "Export / Distribution",
+  jv: "Joint Venture",
+  subsidiary: "Wholly-Owned Subsidiary",
+  greenfield: "Greenfield Operation",
+  mna: "Acquisition / M&A"
+};
+
+const HOMES = {
+  lk: { name: "Sri Lanka", lat: 7.9, lon: 80.7, region: "south_asia" },
+  in: { name: "India", lat: 22, lon: 79, region: "south_asia" },
+  bd: { name: "Bangladesh", lat: 23.7, lon: 90.4, region: "south_asia" },
+  pk: { name: "Pakistan", lat: 30, lon: 69, region: "south_asia" },
+  ae: { name: "United Arab Emirates", lat: 24, lon: 54, region: "mena" },
+  sa: { name: "Saudi Arabia", lat: 24, lon: 45, region: "mena" },
+  sg: { name: "Singapore", lat: 1.35, lon: 103.8, region: "sea" },
+  my: { name: "Malaysia", lat: 4, lon: 102, region: "sea" },
+  uk: { name: "United Kingdom", lat: 54, lon: -2, region: "europe" },
+  de: { name: "Germany", lat: 51, lon: 10, region: "europe" },
+  us: { name: "United States", lat: 39, lon: -98, region: "north_america" },
+  au: { name: "Australia", lat: -25, lon: 133, region: "oceania" },
+  ke: { name: "Kenya", lat: 0.2, lon: 37.9, region: "east_africa" },
+  ng: { name: "Nigeria", lat: 9, lon: 8, region: "west_africa" }
+};
+
+// home region -> target region affinity (1-10): the corridor strength
+const AFFINITY = {
+  south_asia:    { south_asia:7, mena:9, sea:7, east_asia:6, europe:6, north_america:5, oceania:6, east_africa:8, west_africa:6, latam:3 },
+  mena:          { south_asia:9, mena:7, sea:7, east_asia:6, europe:7, north_america:6, oceania:5, east_africa:8, west_africa:6, latam:4 },
+  sea:           { south_asia:7, mena:7, sea:8, east_asia:8, europe:6, north_america:6, oceania:8, east_africa:5, west_africa:4, latam:4 },
+  east_asia:     { south_asia:6, mena:6, sea:8, east_asia:8, europe:6, north_america:7, oceania:7, east_africa:5, west_africa:4, latam:5 },
+  europe:        { south_asia:6, mena:7, sea:6, east_asia:6, europe:9, north_america:8, oceania:6, east_africa:6, west_africa:6, latam:6 },
+  north_america: { south_asia:5, mena:6, sea:6, east_asia:7, europe:8, north_america:9, oceania:7, east_africa:4, west_africa:4, latam:8 },
+  oceania:       { south_asia:6, mena:5, sea:8, east_asia:7, europe:6, north_america:7, oceania:8, east_africa:5, west_africa:3, latam:4 },
+  east_africa:   { south_asia:8, mena:8, sea:5, east_asia:5, europe:6, north_america:4, oceania:5, east_africa:8, west_africa:6, latam:3 },
+  west_africa:   { south_asia:6, mena:6, sea:4, east_asia:5, europe:7, north_america:5, oceania:3, east_africa:6, west_africa:8, latam:4 },
+  latam:         { south_asia:3, mena:4, sea:4, east_asia:5, europe:6, north_america:8, oceania:4, east_africa:3, west_africa:4, latam:8 }
+};
+
+// markets: size, ease(entry), pol(political), cap(capital env), reg(reg clarity),
+// ci(capital intensity to enter), inc(incumbent intensity), mac(macro stability)
+const MARKETS = [
+  { name:"India", lat:22, lon:79, region:"south_asia", size:9, ease:5, pol:6, cap:7, reg:5, ci:6, inc:7, mac:6, strong:["it_saas","pharma","manufacturing","fintech","renewables"], weak:[], note:"Scale market; origin shift underway across electronics, pharma, and digital." },
+  { name:"United Arab Emirates", lat:24, lon:54, region:"mena", size:6, ease:8, pol:8, cap:9, reg:8, ci:5, inc:5, mac:8, strong:["logistics","fintech","consumer","renewables"], weak:["agrifood"], note:"Capital-rich gateway; logistics and re-export hub into MENA and Africa." },
+  { name:"Saudi Arabia", lat:24, lon:45, region:"mena", size:7, ease:6, pol:7, cap:9, reg:6, ci:7, inc:5, mac:7, strong:["industrial","renewables","consumer","logistics"], weak:[], note:"State-led demand surge; Vision-era industrial and energy build-out." },
+  { name:"Qatar", lat:25.3, lon:51.2, region:"mena", size:5, ease:7, pol:8, cap:9, reg:7, ci:6, inc:4, mac:8, strong:["logistics","consumer","fintech"], weak:["agrifood","manufacturing"], note:"Concentrated, high-liquidity market; services and logistics led." },
+  { name:"Singapore", lat:1.35, lon:103.8, region:"sea", size:5, ease:9, pol:9, cap:9, reg:9, ci:6, inc:6, mac:9, strong:["it_saas","fintech","logistics","pharma"], weak:["apparel","agrifood"], note:"Regulatory anchor of Asia; premium base for IP and finance." },
+  { name:"Indonesia", lat:-2, lon:118, region:"sea", size:8, ease:5, pol:6, cap:6, reg:4, ci:6, inc:6, mac:6, strong:["consumer","agrifood","renewables","manufacturing"], weak:[], note:"Largest ASEAN demand pool; resource and consumer depth." },
+  { name:"Vietnam", lat:16, lon:106, region:"sea", size:7, ease:6, pol:6, cap:6, reg:5, ci:5, inc:6, mac:7, strong:["manufacturing","apparel","industrial","logistics"], weak:["fintech"], note:"Manufacturing relocation magnet; export-platform economics." },
+  { name:"Bangladesh", lat:23.7, lon:90.4, region:"south_asia", size:7, ease:5, pol:5, cap:5, reg:4, ci:4, inc:6, mac:5, strong:["apparel","pharma","manufacturing"], weak:["fintech","it_saas"], note:"Apparel and pharma base; cost-advantaged, scaling fast." },
+  { name:"Malaysia", lat:4, lon:102, region:"sea", size:6, ease:7, pol:7, cap:7, reg:7, ci:5, inc:6, mac:7, strong:["manufacturing","it_saas","renewables","logistics"], weak:[], note:"Balanced entry market; electronics and services strength." },
+  { name:"Thailand", lat:15, lon:101, region:"sea", size:6, ease:6, pol:5, cap:7, reg:6, ci:5, inc:6, mac:6, strong:["manufacturing","agrifood","consumer","logistics"], weak:[], note:"Established manufacturing base; agrifood and auto depth." },
+  { name:"Philippines", lat:13, lon:122, region:"sea", size:7, ease:6, pol:5, cap:6, reg:5, ci:4, inc:5, mac:6, strong:["it_saas","consumer","logistics"], weak:[], note:"Services and consumer growth; young demographic dividend." },
+  { name:"Japan", lat:36, lon:138, region:"east_asia", size:8, ease:4, pol:9, cap:9, reg:8, ci:8, inc:9, mac:8, strong:["industrial","pharma","consumer","renewables"], weak:["apparel"], note:"Deep, demanding market; high incumbent intensity, high reward." },
+  { name:"South Korea", lat:36.5, lon:127.8, region:"east_asia", size:7, ease:5, pol:7, cap:8, reg:7, ci:7, inc:8, mac:7, strong:["industrial","it_saas","consumer","renewables"], weak:[], note:"Industrial and tech powerhouse; concentrated incumbents." },
+  { name:"Australia", lat:-25, lon:133, region:"oceania", size:6, ease:8, pol:9, cap:8, reg:8, ci:6, inc:6, mac:8, strong:["agrifood","renewables","it_saas","consumer"], weak:["apparel","manufacturing"], note:"Stable, high-trust market; agrifood, resources, and digital." },
+  { name:"New Zealand", lat:-41, lon:174, region:"oceania", size:4, ease:8, pol:9, cap:7, reg:9, ci:5, inc:5, mac:8, strong:["agrifood","consumer","it_saas"], weak:["manufacturing","industrial"], note:"Small, premium, high-clarity; agrifood and services led." },
+  { name:"United Kingdom", lat:54, lon:-2, region:"europe", size:7, ease:7, pol:7, cap:9, reg:8, ci:7, inc:8, mac:6, strong:["fintech","it_saas","pharma","consumer"], weak:["manufacturing"], note:"Services and finance hub; mature, competitive, capital-deep." },
+  { name:"Germany", lat:51, lon:10, region:"europe", size:8, ease:6, pol:8, cap:9, reg:8, ci:8, inc:9, mac:7, strong:["industrial","manufacturing","renewables","pharma"], weak:[], note:"Industrial core of Europe; engineering and supply-chain dense." },
+  { name:"Netherlands", lat:52.2, lon:5.3, region:"europe", size:6, ease:8, pol:9, cap:9, reg:8, ci:6, inc:7, mac:8, strong:["logistics","agrifood","fintech","renewables"], weak:[], note:"Logistics and agrifood gateway into the EU." },
+  { name:"United States", lat:39, lon:-98, region:"north_america", size:10, ease:6, pol:7, cap:10, reg:7, ci:9, inc:9, mac:7, strong:["it_saas","fintech","pharma","consumer","renewables"], weak:[], note:"Largest market on earth; deep capital, deep competition." },
+  { name:"Mexico", lat:23, lon:-102, region:"north_america", size:8, ease:6, pol:5, cap:6, reg:5, ci:6, inc:6, mac:6, strong:["manufacturing","industrial","agrifood","logistics"], weak:[], note:"Nearshoring stack into North America; manufacturing surge." },
+  { name:"Canada", lat:56, lon:-106, region:"north_america", size:6, ease:8, pol:9, cap:8, reg:8, ci:6, inc:6, mac:8, strong:["agrifood","it_saas","renewables","pharma"], weak:["apparel"], note:"Stable resource and tech market; clean entry conditions." },
+  { name:"Brazil", lat:-10, lon:-53, region:"latam", size:8, ease:4, pol:5, cap:6, reg:4, ci:7, inc:7, mac:5, strong:["agrifood","consumer","renewables","industrial"], weak:[], note:"Latin American scale; complex entry, deep domestic demand." },
+  { name:"Kenya", lat:0.2, lon:37.9, region:"east_africa", size:5, ease:5, pol:5, cap:5, reg:4, ci:4, inc:4, mac:5, strong:["agrifood","fintech","consumer","renewables"], weak:["industrial"], note:"East African hub; fintech and agrifood lead the corridor." },
+  { name:"Ethiopia", lat:9, lon:40, region:"east_africa", size:6, ease:3, pol:4, cap:4, reg:3, ci:4, inc:3, mac:4, strong:["apparel","agrifood","manufacturing"], weak:["fintech","it_saas"], note:"Frontier manufacturing base; low cost, high friction." },
+  { name:"South Africa", lat:-29, lon:24, region:"east_africa", size:6, ease:6, pol:5, cap:6, reg:6, ci:6, inc:6, mac:5, strong:["industrial","agrifood","fintech","renewables","logistics"], weak:[], note:"Gateway to southern Africa; diversified industrial base." },
+  { name:"Nigeria", lat:9, lon:8, region:"west_africa", size:8, ease:4, pol:4, cap:5, reg:3, ci:5, inc:5, mac:4, strong:["fintech","consumer","agrifood"], weak:["industrial","pharma"], note:"West Africa's demand giant; high friction, high upside." },
+  { name:"Egypt", lat:26, lon:30, region:"mena", size:7, ease:4, pol:5, cap:5, reg:4, ci:5, inc:5, mac:4, strong:["manufacturing","apparel","agrifood","consumer"], weak:["fintech"], note:"Manufacturing and apparel base bridging MENA and Africa." },
+  { name:"Turkey", lat:39, lon:35, region:"mena", size:7, ease:5, pol:5, cap:6, reg:5, ci:6, inc:7, mac:5, strong:["manufacturing","apparel","industrial","consumer","agrifood"], weak:[], note:"Manufacturing bridge between Europe, MENA, and Asia." },
+  { name:"Poland", lat:52, lon:19, region:"europe", size:6, ease:7, pol:7, cap:7, reg:7, ci:6, inc:6, mac:7, strong:["manufacturing","industrial","it_saas","logistics"], weak:[], note:"EU manufacturing relocation hub; cost-advantaged within the bloc." }
+];
+
+const MODE_CAP_MOD = { export:-2, jv:0, subsidiary:1, greenfield:1.5, mna:2 };
+const MODE_REG_MOD = { export:0, jv:-0.3, subsidiary:-0.1, greenfield:-0.2, mna:-0.8 };
+
+/* ============================================================
+   SCORING
+   ============================================================ */
+const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+function requiredIndex(ci) {
+  if (ci <= 3) return 0;
+  if (ci <= 5) return 1;
+  if (ci <= 7) return 2;
+  return 3;
+}
+
+function computeMarket(m, homeRegion, sector, capIndex, mode) {
+  const corridor = AFFINITY[homeRegion][m.region];
+  const sectorTail = m.strong.includes(sector) ? 9 : (m.weak.includes(sector) ? 3.5 : 6);
+  const effCi = clamp(m.ci + MODE_CAP_MOD[mode], 1, 10);
+  const reqIdx = requiredIndex(effCi);
+  const gap = capIndex - reqIdx;
+
+  let capDelta;
+  if (gap >= 1) capDelta = 3;
+  else if (gap === 0) capDelta = 2;
+  else if (gap === -1) capDelta = -2.5;
+  else if (gap === -2) capDelta = -5;
+  else capDelta = -7;
+
+  // Vectors (0-10)
+  let v_polreg = clamp(m.pol*0.6 + m.reg*0.4 + MODE_REG_MOD[mode], 0, 10);
+
+  let v_counter = m.ease*0.45 + corridor*0.35 + m.cap*0.2;
+  if ((mode === 'jv' || mode === 'export') && corridor < 5) v_counter -= 1.5;
+  if (corridor >= 8) v_counter += 1;
+  v_counter = clamp(v_counter, 0, 10);
+
+  let v_capital = clamp(5 + capDelta + (m.cap - 5)*0.4, 0, 10);
+  let v_demand = clamp(m.size*0.6 + sectorTail*0.4, 0, 10);
+  let v_compete = clamp((10 - m.inc)*0.7 + m.ease*0.3, 0, 10);
+  let v_macro = clamp(m.mac*0.8 + m.cap*0.2, 0, 10);
+
+  const vectors = [
+    { key:'polreg', name:'Political & Regulatory Resilience', score:v_polreg },
+    { key:'counter', name:'Counterparty Architecture', score:v_counter },
+    { key:'capital', name:'Capital & Operational Endurance', score:v_capital },
+    { key:'demand', name:'Demand Durability', score:v_demand },
+    { key:'compete', name:'Competitive Resistance', score:v_compete },
+    { key:'macro', name:'Macro & Currency Exposure', score:v_macro }
+  ];
+
+  let readiness = (v_polreg*0.18 + v_counter*0.2 + v_capital*0.18 + v_demand*0.18 + v_compete*0.13 + v_macro*0.13) * 10;
+  readiness = Math.round(clamp(readiness, 5, 99));
+
+  let tier = tierFor(readiness);
+  // structural capital override
+  if (capDelta === -7) tier = 'closed';
+  else if (capDelta === -5 && tier !== 'closed') {
+    if (tier === 'prime' || tier === 'viable' || tier === 'contested') tier = 'constrained';
+  }
+
+  return { market:m, corridor, sectorTail, gap, capDelta, vectors, readiness, tier };
+}
+
+function tierFor(s) {
+  if (s >= 74) return 'prime';
+  if (s >= 62) return 'viable';
+  if (s >= 50) return 'contested';
+  if (s >= 38) return 'constrained';
+  return 'closed';
+}
+
+const TIER_META = {
+  prime:       { label:'Prime',                color:'#7bae8f' },
+  viable:      { label:'Viable',               color:'#b6c36b' },
+  contested:   { label:'Contested',            color:'#cda94e' },
+  constrained: { label:'Constrained',          color:'#cf8a56' },
+  closed:      { label:'Structurally Closed',  color:'#b85a4a' }
+};
+
+function verdictFor(s) {
+  if (s >= 6.8) return 'survives';
+  if (s >= 4) return 'fragile';
+  return 'fails';
+}
+
+/* ============================================================
+   SIMULATION REASONING
+   ============================================================ */
+function reasonText(key, verdict, ctx) {
+  const { name, homeName, sectorLabel } = ctx;
+  const T = {
+    polreg: {
+      survives:`${name}'s policy and regulatory environment is stable enough to underwrite a three-year commitment with manageable compliance overhead.`,
+      fragile:`${name} carries real regulatory and political variability. Entry is workable, but the thesis should assume mid-cycle policy shifts.`,
+      fails:`${name}'s regulatory and political environment is too unsettled to anchor a three-year thesis without significant protective structuring.`
+    },
+    counter: {
+      survives:`Credible counterparty and distribution architecture is reachable through the ${homeName} to ${name} corridor.`,
+      fragile:`Counterparty options exist but are thin. Partner selection becomes the single largest execution risk in this entry.`,
+      fails:`The corridor into ${name} lacks reliable counterparty depth for this entry mode. Relationship infrastructure must be built before committing.`
+    },
+    capital: {
+      survives:`Your capital band comfortably funds entry and the operational ramp through the difficult middle period.`,
+      fragile:`Capital is sufficient to enter but thin to endure. A longer-than-expected ramp would strain the position.`,
+      fails:`${name} demands materially more capital intensity than your current band supports for this entry mode. The entry is structurally underfunded.`
+    },
+    demand: {
+      survives:`Addressable demand for ${sectorLabel} in ${name} is deep and durable enough to support a scaling thesis.`,
+      fragile:`Demand exists but is either shallow or contested. Growth will require taking share, not riding the market.`,
+      fails:`${sectorLabel} demand in ${name} is too limited to justify a dedicated three-year build.`
+    },
+    compete: {
+      survives:`Incumbent resistance in ${name} is low enough that a well-executed entry can establish position.`,
+      fragile:`Incumbents in ${name} are entrenched. Expect a contested entry requiring clear differentiation.`,
+      fails:`${name} is dominated by entrenched incumbents. Entry without a structural advantage is unlikely to survive.`
+    },
+    macro: {
+      survives:`Macro and currency conditions in ${name} are stable enough to protect three-year returns.`,
+      fragile:`Macro and currency exposure in ${name} is real. Returns should be stress-tested against depreciation.`,
+      fails:`${name}'s macro and currency instability poses a first-order threat to three-year returns.`
+    }
+  };
+  return T[key][verdict];
+}
+
+const REC_TEXT = {
+  polreg:"Commission a focused political and regulatory exposure read before any capital is committed.",
+  counter:"Prioritize counterparty mapping and partner due diligence ahead of entry.",
+  capital:"Re-scope the capital plan or the entry mode to match the market's true funding requirement.",
+  demand:"Validate addressable demand through primary market sizing before committing to a dedicated build.",
+  compete:"Define a defensible differentiation thesis before entering this contested field.",
+  macro:"Build currency and macro hedging into the entry structure from day one."
+};
+
+function synthesize(result, ctx) {
+  const verdicts = result.vectors.map(v => verdictFor(v.score));
+  const fails = verdicts.filter(x => x === 'fails').length;
+  const fragiles = verdicts.filter(x => x === 'fragile').length;
+  const survives = verdicts.filter(x => x === 'survives').length;
+
+  let verdict, text;
+  if (fails >= 2) {
+    verdict = "High-Risk Entry";
+    text = `This entry fails on more than one structural vector. It should not proceed into ${ctx.name} without a fundamental restructuring of the approach, the entry mode, or the timing.`;
+  } else if (fails === 1) {
+    verdict = "Conditional Entry";
+    text = `One structural vector fails outright. Entry into ${ctx.name} is possible only if that vector is resolved before capital is committed. Everything else is workable.`;
+  } else if (fragiles >= 3) {
+    verdict = "Fragile Thesis";
+    text = `No outright failures, but the thesis rests on several fragile vectors. ${ctx.name} is enterable, but sequencing and protective structuring are essential to survival.`;
+  } else if (survives >= 5) {
+    verdict = "Robust Thesis";
+    text = `The entry survives across nearly all structural vectors. ${ctx.name} is a high-conviction corridor for your position. The advantage is in moving before the window narrows.`;
+  } else {
+    verdict = "Viable with Conditions";
+    text = `The entry into ${ctx.name} is viable but conditional. Address the fragile vectors before scaling commitment, and the corridor holds.`;
+  }
+
+  // weakest 1-2 vectors for recommendation
+  const sorted = [...result.vectors].sort((a,b) => a.score - b.score);
+  const weak = sorted.slice(0, 2).filter(v => v.score < 6.8);
+  const recs = weak.length ? weak.map(v => REC_TEXT[v.key]) : ["Move to a configured assessment to lock entry sequencing and counterparty architecture."];
+
+  return { verdict, text, recs, counts:{fails, fragiles, survives} };
+}
+
+/* ============================================================
+   POPULATE CONTROLS
+   ============================================================ */
+const homeSelect = document.getElementById('homeSelect');
+Object.entries(HOMES).forEach(([k,v]) => {
+  const o = document.createElement('option');
+  o.value = k; o.textContent = v.name;
+  if (k === 'lk') o.selected = true;
+  homeSelect.appendChild(o);
+});
+const sectorSelect = document.getElementById('sectorSelect');
+Object.entries(SECTORS).forEach(([k,v]) => {
+  const o = document.createElement('option');
+  o.value = k; o.textContent = v;
+  if (k === 'apparel') o.selected = true;
+  sectorSelect.appendChild(o);
+});
+
+/* ============================================================
+   MAP SETUP (D3)
+   ============================================================ */
+const svg = d3.select('#atlasMap');
+const W = 1000, H = 600;
+svg.attr('viewBox', `0 0 ${W} ${H}`).attr('preserveAspectRatio','xMidYMid meet');
+
+const defs = svg.append('defs');
+// glow filter
+const glow = defs.append('filter').attr('id','nodeGlow').attr('x','-80%').attr('y','-80%').attr('width','260%').attr('height','260%');
+glow.append('feGaussianBlur').attr('stdDeviation','3.2').attr('result','b');
+const fm = glow.append('feMerge');
+fm.append('feMergeNode').attr('in','b');
+fm.append('feMergeNode').attr('in','SourceGraphic');
+// corridor gradient
+const cg = defs.append('linearGradient').attr('id','corridorGrad').attr('gradientUnits','userSpaceOnUse');
+cg.append('stop').attr('offset','0%').attr('stop-color','#c4a86e').attr('stop-opacity','0.05');
+cg.append('stop').attr('offset','50%').attr('stop-color','#d8bd83').attr('stop-opacity','0.7');
+cg.append('stop').attr('offset','100%').attr('stop-color','#c4a86e').attr('stop-opacity','0.2');
+
+const projection = d3.geoNaturalEarth1();
+const path = d3.geoPath(projection);
+projection.fitExtent([[14,20],[W-14,H-20]], {type:'Sphere'});
+
+const gZoom = svg.append('g');
+const gGrat = gZoom.append('g');
+const gCountries = gZoom.append('g');
+const gCorridors = gZoom.append('g');
+const gNodes = gZoom.append('g');
+const gHome = gZoom.append('g');
+
+// sphere + graticule
+gGrat.append('path').datum({type:'Sphere'}).attr('class','sphere-outline').attr('d', path);
+gGrat.append('path').datum(d3.geoGraticule10()).attr('class','graticule').attr('d', path);
+
+// zoom
+const zoom = d3.zoom().scaleExtent([1, 7]).on('zoom', (e) => {
+  gZoom.attr('transform', e.transform);
+});
+svg.call(zoom);
+
+// load world
+fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+  .then(r => r.json())
+  .then(topo => {
+    const countries = topojson.feature(topo, topo.objects.countries).features;
+    gCountries.selectAll('path.country')
+      .data(countries).enter()
+      .append('path')
+      .attr('class','country')
+      .attr('d', path)
+      .attr('data-name', d => d.properties.name);
+    drawDormantNodes();
+  })
+  .catch(() => { drawDormantNodes(); });
+
+// dormant nodes (before activation)
+let nodeSel = null;
+function drawDormantNodes() {
+  gNodes.selectAll('*').remove();
+  const g = gNodes.selectAll('g.node').data(MARKETS, d => d.name).enter()
+    .append('g').attr('class','node')
+    .attr('transform', d => {
+      const p = projection([d.lon, d.lat]); return `translate(${p[0]},${p[1]})`;
+    });
+  g.append('circle').attr('class','node-core')
+    .attr('r', d => 2.6 + d.size*0.32)
+    .attr('fill', '#3a4254').attr('opacity', 0.5);
+  g.append('circle').attr('class','node-hit').attr('r', 14);
+  nodeSel = g;
+}
+
+const tooltip = document.getElementById('atlasTooltip');
+const mapContainer = document.querySelector('.map-frame');
+
+/* ============================================================
+   STATE + RENDER
+   ============================================================ */
+let lastResults = {};   // name -> result
+let homeMeta = null;
+let activated = false;
+
+function runAtlas() {
+  const homeKey = homeSelect.value;
+  homeMeta = HOMES[homeKey];
+  const homeRegion = homeMeta.region;
+  const sector = sectorSelect.value;
+  const capIndex = parseInt(capitalSelect.value);
+  const mode = modeSelect.value;
+
+  lastResults = {};
+  MARKETS.forEach(m => {
+    if (m.name === homeMeta.name) return; // skip home if it's a target
+    lastResults[m.name] = computeMarket(m, homeRegion, sector, capIndex, mode);
+  });
+
+  colorizeNodes();
+  drawCorridors();
+  drawHome();
+  buildRanking(sector, mode);
+
+  document.getElementById('mapPrompt').classList.add('hidden');
+  document.getElementById('mapLegend').classList.add('shown');
+  document.getElementById('mapHint').classList.add('shown');
+  document.getElementById('rankingSection').classList.add('shown');
+  activated = true;
+
+  // gentle scroll to map
+  document.querySelector('.atlas-section').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function colorizeNodes() {
+  nodeSel.each(function(d) {
+    const g = d3.select(this);
+    const res = lastResults[d.name];
+    const core = g.select('.node-core');
+    if (!res) { g.style('display','none'); return; }
+    g.style('display', null);
+    const meta = TIER_META[res.tier];
+    core.transition().duration(700)
+      .attr('fill', meta.color)
+      .attr('opacity', res.tier === 'closed' ? 0.4 : 0.95)
+      .attr('r', 2.6 + d.size*0.34)
+      .attr('filter', (res.tier==='prime'||res.tier==='viable') ? 'url(#nodeGlow)' : null);
+  });
+
+  nodeSel.on('mouseover', function(e, d) {
+      const res = lastResults[d.name]; if (!res) return;
+      const meta = TIER_META[res.tier];
+      d3.select(this).select('.node-core').transition().duration(150).attr('r', 3 + d.size*0.34 + 3);
+      tooltip.innerHTML = `
+        <div class="tt-name">${d.name}</div>
+        <div class="tt-region">${regionLabel(d.region)}</div>
+        <div class="tt-score-row">
+          <span class="tt-score" style="color:${meta.color}">${res.readiness}</span>
+          <span class="tt-tier" style="color:${meta.color}">${meta.label}</span>
+        </div>
+        <div class="tt-note">${d.note}</div>
+        <div class="tt-cta">Click to run entry simulation</div>`;
+      tooltip.classList.add('shown');
+    })
+    .on('mousemove', function(e) {
+      const rect = mapContainer.getBoundingClientRect();
+      let x = e.clientX - rect.left + 18;
+      let y = e.clientY - rect.top + 18;
+      if (x > rect.width - 300) x = e.clientX - rect.left - 300;
+      if (y > rect.height - 200) y = e.clientY - rect.top - 200;
+      tooltip.style.left = x + 'px';
+      tooltip.style.top = y + 'px';
+    })
+    .on('mouseout', function(e, d) {
+      d3.select(this).select('.node-core').transition().duration(150).attr('r', 2.6 + d.size*0.34);
+      tooltip.classList.remove('shown');
+    })
+    .on('click', function(e, d) {
+      e.stopPropagation();
+      const res = lastResults[d.name]; if (!res) return;
+      openSim(res);
+    });
+}
+
+function drawHome() {
+  gHome.selectAll('*').remove();
+  if (!homeMeta) return;
+  const p = projection([homeMeta.lon, homeMeta.lat]);
+  const g = gHome.append('g').attr('transform', `translate(${p[0]},${p[1]})`);
+  const ring = g.append('circle').attr('class','home-node-ring').attr('r', 6);
+  g.append('circle').attr('class','home-node-core').attr('r', 3.2).attr('filter','url(#nodeGlow)');
+  g.append('text').attr('class','home-label').attr('y', -12).attr('text-anchor','middle').text('Home · ' + homeMeta.name);
+  // pulse ring
+  function pulse() {
+    ring.attr('r', 6).attr('opacity', 0.6)
+      .transition().duration(2200).ease(d3.easeSinOut)
+      .attr('r', 16).attr('opacity', 0)
+      .on('end', pulse);
+  }
+  pulse();
+}
+
+function drawCorridors() {
+  gCorridors.selectAll('*').remove();
+  if (!homeMeta) return;
+  const home = [homeMeta.lon, homeMeta.lat];
+  // draw to prime + viable markets
+  const targets = Object.values(lastResults).filter(r => r.tier === 'prime' || r.tier === 'viable');
+  targets.forEach((r, i) => {
+    const dest = [r.market.lon, r.market.lat];
+    const interp = d3.geoInterpolate(home, dest);
+    const pts = d3.range(0, 1.001, 0.025).map(t => projection(interp(t)));
+    const line = d3.line().curve(d3.curveBasis)(pts);
+    const op = r.tier === 'prime' ? 0.55 : 0.3;
+    const pathEl = gCorridors.append('path')
+      .attr('class','corridor')
+      .attr('d', line)
+      .attr('stroke', r.tier === 'prime' ? '#d8bd83' : '#c4a86e')
+      .attr('stroke-width', r.tier === 'prime' ? 1.3 : 0.9)
+      .attr('opacity', 0);
+    const len = pathEl.node().getTotalLength();
+    pathEl.attr('stroke-dasharray', len + ' ' + len)
+      .attr('stroke-dashoffset', len)
+      .transition().delay(i*90).duration(1100).ease(d3.easeCubicOut)
+      .attr('stroke-dashoffset', 0)
+      .attr('opacity', op);
+  });
+}
+
+function regionLabel(r) {
+  return ({
+    south_asia:'South Asia', mena:'Middle East & North Africa', sea:'Southeast Asia',
+    east_asia:'East Asia', europe:'Europe', north_america:'North America',
+    oceania:'Oceania', east_africa:'East & Southern Africa', west_africa:'West Africa', latam:'Latin America'
+  })[r] || r;
+}
+
+/* ============================================================
+   RANKING GRID
+   ============================================================ */
+function buildRanking(sector, mode) {
+  const grid = document.getElementById('rankingGrid');
+  grid.innerHTML = '';
+  const sorted = Object.values(lastResults).sort((a,b) => b.readiness - a.readiness);
+  sorted.forEach(r => {
+    const meta = TIER_META[r.tier];
+    const card = document.createElement('div');
+    card.className = 'rank-card';
+    card.style.setProperty('--tier', meta.color);
+    card.innerHTML = `
+      <div class="rank-card-head">
+        <div class="rank-name">${r.market.name}</div>
+        <div class="rank-score">${r.readiness}</div>
+      </div>
+      <div class="rank-tier">${meta.label}</div>
+      <div class="rank-note">${r.market.note}</div>
+      <div class="rank-open">Run entry simulation →</div>`;
+    card.addEventListener('click', () => openSim(r));
+    grid.appendChild(card);
+  });
+}
+
+/* ============================================================
+   SIMULATION MODAL
+   ============================================================ */
+const simOverlay = document.getElementById('simOverlay');
+const vectorList = document.getElementById('vectorList');
+let simTimers = [];
+let currentSim = null;
+
+function clearSimTimers() { simTimers.forEach(t => clearTimeout(t)); simTimers = []; }
+
+function openSim(result) {
+  currentSim = result;
+  const m = result.market;
+  const sector = sectorSelect.value;
+  const mode = modeSelect.value;
+  const ctx = { name:m.name, homeName:(homeMeta?homeMeta.name:'your market'), sectorLabel:SECTORS[sector] };
+  const meta = TIER_META[result.tier];
+
+  document.getElementById('simName').textContent = m.name;
+  document.getElementById('simSub').textContent = regionLabel(m.region) + ' · ' + MODES[mode] + ' entry · ' + SECTORS[sector];
+  const scoreEl = document.getElementById('simScore');
+  const tierEl = document.getElementById('simTier');
+  scoreEl.textContent = result.readiness; scoreEl.style.color = meta.color;
+  tierEl.textContent = meta.label; tierEl.style.color = meta.color;
+  document.getElementById('ctaMarket').textContent = m.name;
+
+  // reset
+  document.getElementById('simSynthesis').classList.remove('shown');
+  document.getElementById('simCta').classList.remove('shown');
+  document.getElementById('simProgressText').textContent = 'Running thesis against six structural vectors…';
+
+  // build vector rows in scanning state
+  vectorList.innerHTML = '';
+  result.vectors.forEach(v => {
+    const row = document.createElement('div');
+    row.className = 'vector';
+    row.dataset.key = v.key;
+    row.innerHTML = `
+      <div class="vector-main">
+        <div class="vector-name">${v.name}</div>
+        <div class="vector-reason scanning">Scanning…</div>
+      </div>
+      <div class="vector-verdict"></div>`;
+    vectorList.appendChild(row);
+  });
+
+  simOverlay.classList.add('shown');
+  document.body.style.overflow = 'hidden';
+
+  // staggered reveal
+  clearSimTimers();
+  const rows = vectorList.querySelectorAll('.vector');
+  result.vectors.forEach((v, i) => {
+    simTimers.push(setTimeout(() => {
+      const row = rows[i];
+      const verdict = verdictFor(v.score);
+      const reasonEl = row.querySelector('.vector-reason');
+      const vEl = row.querySelector('.vector-verdict');
+      reasonEl.classList.remove('scanning');
+      reasonEl.textContent = reasonText(v.key, verdict, ctx);
+      vEl.classList.add(verdict);
+      vEl.textContent = verdict === 'survives' ? 'Survives' : (verdict === 'fragile' ? 'Fragile' : 'Fails');
+      row.classList.add('resolved');
+      document.getElementById('simProgressText').textContent = `Vector ${i+1} of 6 resolved`;
+    }, 750 + i*780));
+  });
+
+  // synthesis after all
+  simTimers.push(setTimeout(() => revealSynthesis(result, ctx), 750 + result.vectors.length*780 + 350));
+}
+
+function revealSynthesis(result, ctx) {
+  const s = synthesize(result, ctx);
+  document.getElementById('simProgressText').textContent = 'Simulation complete';
+  document.getElementById('synthVerdict').innerHTML = `<em>${s.verdict}</em>`;
+  document.getElementById('synthText').textContent = s.text;
+  const recWrap = document.getElementById('synthRecs');
+  recWrap.innerHTML = '';
+  s.recs.forEach(r => {
+    const d = document.createElement('div');
+    d.className = 'synthesis-rec';
+    d.innerHTML = `<p>${r}</p>`;
+    recWrap.appendChild(d);
+  });
+  document.getElementById('simSynthesis').classList.add('shown');
+  setTimeout(() => document.getElementById('simCta').classList.add('shown'), 300);
+}
+
+function skipSim() {
+  if (!currentSim) return;
+  clearSimTimers();
+  const sector = sectorSelect.value;
+  const ctx = { name:currentSim.market.name, homeName:(homeMeta?homeMeta.name:'your market'), sectorLabel:SECTORS[sector] };
+  const rows = vectorList.querySelectorAll('.vector');
+  currentSim.vectors.forEach((v, i) => {
+    const row = rows[i];
+    const verdict = verdictFor(v.score);
+    const reasonEl = row.querySelector('.vector-reason');
+    const vEl = row.querySelector('.vector-verdict');
+    reasonEl.classList.remove('scanning');
+    reasonEl.textContent = reasonText(v.key, verdict, ctx);
+    vEl.className = 'vector-verdict ' + verdict;
+    vEl.textContent = verdict === 'survives' ? 'Survives' : (verdict === 'fragile' ? 'Fragile' : 'Fails');
+    row.classList.add('resolved');
+  });
+  revealSynthesis(currentSim, ctx);
+}
+
+function closeSim() {
+  clearSimTimers();
+  simOverlay.classList.remove('shown');
+  document.body.style.overflow = '';
+  currentSim = null;
+}
+
+document.getElementById('simClose').addEventListener('click', closeSim);
+document.getElementById('simSkip').addEventListener('click', skipSim);
+simOverlay.addEventListener('click', (e) => { if (e.target === simOverlay) closeSim(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSim(); });
+
+/* ============================================================
+   FRAMEWORK TOGGLE
+   ============================================================ */
+function toggleFw(el) { el.classList.toggle('open'); }
+
+/* ============================================================
+   WIRE UP
+   ============================================================ */
+document.getElementById('runBtn').addEventListener('click', runAtlas);
+</script>
+</body>
+</html>
